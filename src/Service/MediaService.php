@@ -15,17 +15,28 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class MediaService
 {
+    const SECRET_KEY_LENGHT = 256;
+
     private string                $mediaFolder;
 
     private Filesystem            $filesystem;
 
     private FileEncryptionService $fileEncryption;
 
-    public function __construct(FileEncryptionService $fileEncryption, string $mediaFolder)
-    {
-        $this->mediaFolder    = $mediaFolder;
-        $this->fileEncryption = $fileEncryption;
-        $this->filesystem     = new Filesystem();
+    /**
+     * @var EncryptionService
+     */
+    private EncryptionService $encryptionService;
+
+    public function __construct(
+        EncryptionService $encryptionService,
+        FileEncryptionService $fileEncryption,
+        string $mediaFolder
+    ) {
+        $this->encryptionService = $encryptionService;
+        $this->mediaFolder       = $mediaFolder;
+        $this->fileEncryption    = $fileEncryption;
+        $this->filesystem        = new Filesystem();
     }
 
     /**
@@ -39,11 +50,15 @@ class MediaService
             return null;
         }
 
+        $password          = $this->generatePassword(self::SECRET_KEY_LENGHT);
+        $encryptedPassword = $this->encryptionService->encryptData($password);
+
         $media
             ->setUuid(Uuid::uuid4())
             ->setContentType($file->getClientMimeType())
             ->setSize($file->getSize())
-            ->setExtension($file->guessExtension());
+            ->setExtension($file->guessExtension())
+            ->setKey(base64_encode($encryptedPassword));
 
         $path = $this->absolutePath($media);
 
@@ -60,7 +75,7 @@ class MediaService
         }
 
         // write document to filesystem
-        $this->fileEncryption->encryptFile($file, $path);
+        $this->fileEncryption->encryptFile($file, $password, $path);
 
         // remove uploaded file
         $this
@@ -77,9 +92,13 @@ class MediaService
     {
         $path = $this->absolutePath($media);
 
-        yield from $this->fileEncryption->decryptFile(
-            new File($path, true)
-        );
+        $key = $this
+            ->encryptionService
+            ->decryptData(base64_decode($media->getKey()));
+
+        yield from $this
+            ->fileEncryption
+            ->decryptFile(new File($path, true), $key);
     }
 
     private function absolutePath(Media $media): ?string
@@ -90,5 +109,20 @@ class MediaService
             DIRECTORY_SEPARATOR,
             $media->getUuid()
         );
+    }
+
+    private function generatePassword(int $length): string
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' .
+                 '0123456789-=~!@#$%^&*()_+,.<>?;:[]{}';
+
+        $password = '';
+        $max      = strlen($chars) - 1;
+
+        for ($index = 0; $index < $length; $index ++) {
+            $password .= $chars[random_int(0, $max)];
+        }
+
+        return $password;
     }
 }

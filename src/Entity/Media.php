@@ -38,28 +38,35 @@ class Media
      * @ORM\Column(name="content_type", type="string", length=255, nullable=true)
      * @JMS\Expose()
      */
-    protected ?string $contentType = null;
+    private ?string $contentType = null;
 
     /**
      * @ORM\Column(name="size", type="integer", nullable=true)
      * @JMS\Expose()
      */
-    protected ?int $size = null;
+    private ?int $size = null;
 
     /**
      * @JMS\Type("string")
      * @JMS\Expose()
      * @ORM\Column(type="string", type="string", length=255)
      */
-    protected ?string $extension = null;
+    private ?string $extension = null;
+
+    /**
+     * @JMS\Type("string")
+     * @JMS\Expose()
+     * @ORM\Column(type="string", type="string", length=1024)
+     */
+    private ?string $key = null;
 
     /**
      * This is just a temporary file holder, for file uploads through a form.
      *
      * @var UploadedFile|File|SplFileInfo|null
-     * @Assert\File(maxSize="3000000")
+     * @Assert\File(maxSize="10000000")
      */
-    protected ?SplFileInfo $file = null;
+    private ?SplFileInfo $file = null;
 
     public function getUuid(): ?UuidInterface
     {
@@ -102,6 +109,17 @@ class Media
     public function setExtension(?string $extension): self
     {
         $this->extension = $extension;
+        return $this;
+    }
+
+    public function getKey(): ?string
+    {
+        return $this->key;
+    }
+
+    public function setKey(?string $key): self
+    {
+        $this->key = $key;
         return $this;
     }
 
