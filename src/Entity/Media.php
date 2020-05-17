@@ -57,7 +57,7 @@ class Media
      * This is just a temporary file holder, for file uploads through a form.
      *
      * @var UploadedFile|File|SplFileInfo|null
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="3000000")
      */
     protected ?SplFileInfo $file = null;
 

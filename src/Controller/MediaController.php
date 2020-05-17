@@ -15,6 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -56,9 +57,21 @@ class MediaController extends AbstractApiController
     public function getByIdAction(
         Media $media,
         MediaService $mediaService
-    ): BinaryFileResponse {
-        $file = $mediaService->getFile($media);
-        return new BinaryFileResponse($file);
+    ): StreamedResponse {
+        $response = new StreamedResponse();
+        $response->headers->set('Content-Type', $media->getContentType());
+
+        // Instead of a string, the streamed response will execute
+        // a callback function to retrieve data chunks.
+        $response->setCallback(
+            static function () use ($media, $mediaService) {
+                foreach ($mediaService->decrypt($media) as $block) {
+                    echo $block;
+                }
+            }
+        );
+
+        return $response;
     }
 
     /**
@@ -161,7 +174,7 @@ class MediaController extends AbstractApiController
 
         return $this->json(
             [
-                'uuid' => $media->getUuid()
+                'uuid' => $media->getUuid(),
             ],
             JsonResponse::HTTP_ACCEPTED
         );

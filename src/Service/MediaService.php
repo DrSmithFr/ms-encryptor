@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use Exception;
+use Generator;
 use App\Entity\Media;
 use RuntimeException;
 use Ramsey\Uuid\Uuid;
@@ -14,14 +15,17 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class MediaService
 {
-    private string     $mediaFolder;
+    private string                $mediaFolder;
 
-    private Filesystem $filesystem;
+    private Filesystem            $filesystem;
 
-    public function __construct(string $mediaFolder)
+    private FileEncryptionService $fileEncryption;
+
+    public function __construct(FileEncryptionService $fileEncryption, string $mediaFolder)
     {
-        $this->mediaFolder = $mediaFolder;
-        $this->filesystem  = new Filesystem();
+        $this->mediaFolder    = $mediaFolder;
+        $this->fileEncryption = $fileEncryption;
+        $this->filesystem     = new Filesystem();
     }
 
     /**
@@ -56,9 +60,12 @@ class MediaService
         }
 
         // write document to filesystem
+        $this->fileEncryption->encryptFile($file, $path);
+
+        // remove uploaded file
         $this
             ->filesystem
-            ->copy($file->getRealPath(), $path);
+            ->remove($file->getRealPath());
 
         return realpath($path);
     }
@@ -66,10 +73,13 @@ class MediaService
     /**
      * @throws FileNotFoundException
      */
-    public function getFile(Media $media): File
+    public function decrypt(Media $media): Generator
     {
         $path = $this->absolutePath($media);
-        return new File($path, true);
+
+        yield from $this->fileEncryption->decryptFile(
+            new File($path, true)
+        );
     }
 
     private function absolutePath(Media $media): ?string

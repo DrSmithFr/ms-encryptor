@@ -41,7 +41,7 @@ services:
 
     App\Service\MediaService:
         arguments:
-            $mediaFolder: '%env(MEDIA_FOLDER)%'
+            $mediaFolder: '%env(resolve:MEDIA_FOLDER)%'
 
     App\Service\EncryptionService:
         arguments:

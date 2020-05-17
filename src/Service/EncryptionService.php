@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Service;
 
+use RuntimeException;
+
 class EncryptionService
 {
     private string $publicKey;
@@ -20,7 +22,10 @@ class EncryptionService
 
     public function encryptData(string $cipher): string
     {
-        openssl_public_encrypt($cipher, $encrypted, $this->getPublicKey());
+        if (!openssl_public_encrypt($cipher, $encrypted, $this->getPublicKey())) {
+            throw new RuntimeException('Failed to encrypt data');
+        }
+
         return $encrypted;
     }
 
