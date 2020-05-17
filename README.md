@@ -5,7 +5,7 @@
 ## Installation 
 
   - Follow [the guide to install project](INSTALL.md)
-  - Then start database using `make reload`
+  - Before coding, reload database container using `make reload`
 
 ## Coding style and Standards
 
@@ -15,3 +15,12 @@
 - [functional programing](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) Avoid State mutation
 
 ## Usage
+
+  - Create user using `symfony command encryptor:user:create`
+  - Allow API usage with `symfony command encryptor:user:promote --user {uuid}`
+  - Retrieve a session token calling `[POST] /login`
+  - Use endpoint with this token (30s timeout)
+  
+## Documentation
+
+  - Install the project and go on `/documentation`
