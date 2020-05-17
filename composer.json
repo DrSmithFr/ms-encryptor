@@ -5,6 +5,7 @@
     "php": "~7.4",
     "ext-json": "*",
     "ext-pgsql": "*",
+    "ext-openssl": "*",
     "ext-sodium": "*",
     "jms/serializer-bundle": "^3.5",
     "lexik/jwt-authentication-bundle": "^2.6",

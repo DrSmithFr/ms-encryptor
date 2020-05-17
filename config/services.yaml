@@ -37,8 +37,13 @@ services:
     # please note that last definitions always *replace* previous ones
 
     JMS\Serializer\SerializerInterface:
-      alias: jms_serializer
+        alias: jms_serializer
 
     App\Service\MediaService:
         arguments:
             $mediaFolder: '%env(MEDIA_FOLDER)%'
+
+    App\Service\EncryptionService:
+        arguments:
+            $publicKey: '%env(resolve:JWT_PUBLIC_KEY)%'
+            $secretKey: '%env(resolve:JWT_SECRET_KEY)%'
