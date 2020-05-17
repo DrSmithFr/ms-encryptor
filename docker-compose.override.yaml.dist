@@ -1,0 +1,21 @@
+version: '3'
+
+volumes:
+    bdd:
+
+networks:  # Uncomment on linux for static IP and xdebug
+    dev:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.115.0.0/16  # Ip range for static ip on dev mod
+
+services:
+    database:
+        volumes:
+            - bdd:/var/lib/postgresql/data
+        networks:
+            dev:
+                ipv4_address: 10.115.0.4 # used for mysql admin
+            default:
+

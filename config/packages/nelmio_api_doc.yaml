@@ -1,0 +1,20 @@
+nelmio_api_doc:
+    models: { use_jms: true }
+    documentation:
+        info:
+            title: Encryptor
+            description: Simple document encrypted storage API
+            version: 1.0.0
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Value: Bearer {jwt}'
+                name: Authorization
+                in: header
+        security:
+            -
+                Bearer: []
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/(?!(_|documentation)) # Accepts routes under / except /doc
+

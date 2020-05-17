@@ -1,0 +1,184 @@
+_type: export
+__export_format: 4
+__export_date: 2020-05-17T10:36:44.372Z
+__export_source: insomnia.desktop.app:v7.1.1
+resources:
+  - _id: req_217ac030762242e0a494e3fc4fccccbf
+    authentication: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "{{admin}}",
+        	"password": "{{password}}"
+        }
+    created: 1589706627731
+    description: ""
+    headers:
+      - id: pair_fa64ccaf33654101980013a5209f34f3
+        name: Content-Type
+        value: application/json
+    isPrivate: false
+    metaSortKey: -1587461686449
+    method: POST
+    modified: 1589711297474
+    name: User login
+    parameters: []
+    parentId: wrk_0014c6be8cd043f0a3167903c85678be
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingFollowRedirects: global
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api }}/login"
+    _type: request
+  - _id: wrk_0014c6be8cd043f0a3167903c85678be
+    created: 1589706627717
+    description: Mon petit placement financial API
+    modified: 1589706627717
+    name: MS - Encryptor 1.0.0
+    parentId: null
+    _type: workspace
+  - _id: req_ec5c92a36bd743e48aef172ff2aed88e
+    authentication:
+      prefix: ""
+      token: "{{ token }}"
+      type: bearer
+    body: {}
+    created: 1589706627729
+    description: ""
+    headers: []
+    isPrivate: false
+    metaSortKey: -1587461682763
+    method: GET
+    modified: 1589708196133
+    name: Get media File
+    parameters: []
+    parentId: fld_1c275dddc7e64e20acb2a1dc873f8056
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingFollowRedirects: global
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api }}/medias/{% response 'body',
+      'req_be8b1e4172b542f3b14fa1d94144995d', 'b64::JC51dWlk::46b', 'always' %}"
+    _type: request
+  - _id: fld_1c275dddc7e64e20acb2a1dc873f8056
+    created: 1589706627724
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1587461686448
+    modified: 1589706627724
+    name: Medias
+    parentId: wrk_0014c6be8cd043f0a3167903c85678be
+    _type: request_group
+  - _id: req_cdfc79b07c8e436182aebd29789c33aa
+    authentication:
+      token: "{{token}}"
+      type: bearer
+    body: {}
+    created: 1589706627727
+    description: ""
+    headers: []
+    isPrivate: false
+    metaSortKey: -1587461682762
+    method: GET
+    modified: 1589708226835
+    name: Information about physical storage, mineType and extension
+    parameters: []
+    parentId: fld_1c275dddc7e64e20acb2a1dc873f8056
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingFollowRedirects: global
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api }}/medias/{% response 'body',
+      'req_be8b1e4172b542f3b14fa1d94144995d', 'b64::JC51dWlk::46b', 'always'
+      %}/metadata"
+    _type: request
+  - _id: req_be8b1e4172b542f3b14fa1d94144995d
+    authentication:
+      token: "{{token}}"
+      type: bearer
+    body:
+      mimeType: multipart/form-data
+      params:
+        - description: ""
+          fileName: /home/john/Images/Capture d’écran de 2020-02-25 10-28-12.png
+          id: pair_e6a58b0b3a584263a311170ba552df4e
+          name: file
+          type: file
+          value: ""
+    created: 1589706627726
+    description: ""
+    headers:
+      - id: pair_a31ba1b0a63648edb41c33b0207d6190
+        name: Content-Type
+        value: multipart/form-data
+    isPrivate: false
+    metaSortKey: -1587461682761
+    method: POST
+    modified: 1589707669107
+    name: Upload a new media
+    parameters: []
+    parentId: fld_1c275dddc7e64e20acb2a1dc873f8056
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingFollowRedirects: global
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api }}/medias"
+    _type: request
+  - _id: env_3bc811e7c27945e495705afb34c52923
+    color: null
+    created: 1589706627719
+    data:
+      base_url: https://mpp-gateway
+      password: admin
+      username: admin@mpp.fr
+    dataPropertyOrder:
+      "&":
+        - base_url
+        - username
+        - password
+    isPrivate: false
+    metaSortKey: 1587461686457
+    modified: 1589706627719
+    name: Base environment
+    parentId: wrk_0014c6be8cd043f0a3167903c85678be
+    _type: environment
+  - _id: jar_dbfae0fe5c7045cb95c610e08e92d979
+    cookies: []
+    created: 1589706627722
+    modified: 1589706627722
+    name: Default Jar
+    parentId: wrk_0014c6be8cd043f0a3167903c85678be
+    _type: cookie_jar
+  - _id: env_6ab7c1d126e2458683795e6e771dffa6
+    color: null
+    created: 1589706627720
+    data:
+      admin: 766af668-0c19-4624-bcb4-bdb09ce4dada
+      api: https://ms-encryptor
+      password: default
+      token: "{% response 'body', 'req_217ac030762242e0a494e3fc4fccccbf',
+        'b64::JC50b2tlbg==::46b', 'always' %}"
+      user: 0b819649-bef4-4fb9-a6b4-7b7b0b69961c
+    dataPropertyOrder:
+      "&":
+        - api
+        - admin
+        - user
+        - password
+        - token
+    isPrivate: false
+    metaSortKey: 1587461686457
+    modified: 1589706959970
+    name: Encryptor
+    parentId: env_3bc811e7c27945e495705afb34c52923
+    _type: environment

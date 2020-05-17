@@ -1,0 +1,36 @@
+security:
+    encoders:
+        App\entity\User:
+            algorithm:   sodium
+            memory_cost: 4092
+            time_cost:   10
+    providers:
+        users:
+            entity:
+                class: App\Entity\User
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        login:
+            pattern:  ^/login$
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        documentation:
+            pattern: ^/documentation$
+            security: false
+        main:
+            stateless: true
+            anonymous: false
+            provider: users
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+    access_control:
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/,       roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }
