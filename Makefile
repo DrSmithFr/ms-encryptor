@@ -9,14 +9,16 @@ env:
 	sudo apt install nginx
 
 dependencies:
+	symfony composer self-update --1
 	symfony composer install
 start:
-	docker-compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
+	docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
 	symfony server:start --daemon
 	sleep 5
 
 stop:
-	docker-compose kill; docker-compose rm -f
+	docker compose kill
+	docker compose rm -f
 	symfony server:stop
 
 database:

@@ -10,6 +10,8 @@
 
 ## fix permission issues
 
+ - Add your USER to the www-data group
+
  - Edit `/etc/php/7.4/fpm/pool.d/www.conf` and replace :
  
        user = ww-data
