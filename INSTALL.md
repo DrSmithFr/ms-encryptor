@@ -3,7 +3,8 @@
   - Install [docker](https://docs.docker.com/get-docker/)
   - Install [docker-compose](https://docs.docker.com/compose/install/)
   - Install [Symfony Local Web Server](https://symfony.com/doc/current/setup/symfony_server.html)
-  - Install PHP and needed library, hooks and dependencies with `make`
+  - Add [PHP-PPA repository](ppa:ondrej/php) with add-apt-repository
+  - Install PHP and needed library, hooks and dependencies with `make env`
 
 # Create nginx vHost
 
@@ -18,11 +19,6 @@
  
        user = {YOUR_LINUX_USERNAME}
        group = {YOUR_LINUX_USERNAME}
-
-## Create self signed certificate
-
- - Generate cert using `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt`
- - Copy configuration using `sudo cp config/nginx/snippets /etc/nginx/snippets`
 
 ## Create vHost
 
