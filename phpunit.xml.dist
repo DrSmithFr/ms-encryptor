@@ -18,6 +18,11 @@
         <server name="MAILER_DSN" value="null://localhost" />
         <server name="KERNEL_CLASS" value="App\Kernel"/>
 
+        <server name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt-test/private.pem"/>
+        <server name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt-test/public.pem"/>
+        <server name="JWT_PASSPHRASE" value="extzh99p6xfc6u9g2ucrzsqg89rffqcu"/>
+        <server name="JWT_TTL" value="60"/>
+
         <!-- Simplify CI logs -->
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
     </php>
