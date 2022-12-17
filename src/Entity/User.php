@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 use App\Enum\SecurityRoleEnum;
@@ -12,29 +13,28 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use App\Entity\Traits\BlamableTrait;
 use App\Entity\Traits\TimestampableTrait;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @JMS\ExclusionPolicy("all")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @codeCoverageIgnore
- */
-class User implements UserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[JMS\ExclusionPolicy('all')]
+class User implements UserInterface,
+    PasswordAuthenticatedUserInterface,
+    PasswordHasherAwareInterface
 {
     use IdTrait;
     use TimestampableTrait;
     use BlamableTrait;
 
-    /**
-     * @JMS\Type("string")
-     * @ORM\Column(type="uuid", unique=true)
-     */
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[JMS\Type('string')]
+    #[JMS\Expose]
+    #[JMS\Groups(['Default', 'Login'])]
     private ?UuidInterface $uuid = null;
 
-    /**
-     * @var string|null
-     * @ORM\Column()
-     */
+    #[ORM\Column]
+    #[JMS\Groups(['Default', 'Login'])]
     private ?string $password = null;
 
     /**
@@ -42,19 +42,25 @@ class User implements UserInterface
      */
     private ?string $plainPassword = null;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
+    #[ORM\Column(nullable: true)]
     private ?string $salt = null;
 
-    /**
-     * @var string[]
-     * @JMS\Expose()
-     * @JMS\MaxDepth(1)
-     * @JMS\Type("array<string>")
-     * @ORM\Column(type="json", name="roles")
-     */
+    #[ORM\Column(name: 'roles', type: 'json')]
+    #[JMS\Expose]
+    #[JMS\Groups(['Default'])]
+    #[JMS\MaxDepth(1)]
+    #[JMS\Type('array<string>')]
     private array $roles = [];
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
+
+    public function getPasswordHasherName(): ?string
+    {
+        return "harsh";
+    }
 
     /**
      * Returns the username used to authenticate the user.

@@ -19,7 +19,7 @@ abstract class Enum
 
     public static function getAll(): array
     {
-        $calledClass = get_called_class();
+        $calledClass = static::class;
 
         if (!array_key_exists($calledClass, self::$constCacheArray)) {
             try {
@@ -56,7 +56,7 @@ abstract class Enum
     public static function validateName(string $name): void
     {
         if (!self::isValidName($name)) {
-            throw new InvalidEnumNameException($name, get_called_class());
+            throw new InvalidEnumNameException($name, static::class);
         }
     }
 
@@ -66,7 +66,7 @@ abstract class Enum
     public static function validateValue(string $value): void
     {
         if (!self::isValidValue($value)) {
-            throw new InvalidEnumValueException($value, get_called_class());
+            throw new InvalidEnumValueException($value, static::class);
         }
     }
 }

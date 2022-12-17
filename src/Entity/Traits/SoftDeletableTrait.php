@@ -3,26 +3,18 @@
 namespace App\Entity\Traits;
 
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use JMS\Serializer\Annotation as JMS;
 
-/**
- * @codeCoverageIgnore
- */
 trait SoftDeletableTrait
 {
-    /**
-     * @JMS\Exclude()
-     * @var DateTime|null
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected ?DateTime $deletedAt;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[JMS\Exclude]
+    protected ?DateTime $deletedAt = null;
 
     /**
      * Sets deletedAt.
-     *
-     * @param DateTime|null $deletedAt
-     *
      * @return $this
      */
     public function setDeletedAt(?DateTime $deletedAt): self

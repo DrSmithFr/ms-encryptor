@@ -6,25 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @codeCoverageIgnore
- */
 trait BlamableTrait
 {
-    /**
-     * @JMS\Groups({"blameable"})
-     * @var string|null
-     * @Gedmo\Blameable(on="create")
-     * @ORM\Column(nullable=true)
-     */
+    #[ORM\Column(nullable: true)]
+    #[Gedmo\Blameable(on: 'create')]
+    #[JMS\Groups(['blameable'])]
     private ?string $createdBy = null;
 
-    /**
-     * @JMS\Groups({"blameable"})
-     * @var string|null
-     * @Gedmo\Blameable(on="update")
-     * @ORM\Column(nullable=true)
-     */
+    #[ORM\Column(nullable: true)]
+    #[Gedmo\Blameable(on: 'update')]
+    #[JMS\Groups(['blameable'])]
     private ?string $updatedBy = null;
 
     public function getCreatedBy(): ?string

@@ -9,15 +9,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class JsonPostSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @return array
-     * @codeCoverageIgnore
-     */
     public static function getSubscribedEvents(): array
     {
-        return array(
-            KernelEvents::CONTROLLER => 'convertJsonStringToArray',
-        );
+        return [KernelEvents::CONTROLLER => 'convertJsonStringToArray'];
     }
 
     /**
@@ -27,7 +21,7 @@ class JsonPostSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if ($request->getContentType() !== 'json' || !$request->getContent()) {
+        if ($request->getContentTypeFormat() !== 'json' || !$request->getContent()) {
             return;
         }
 
@@ -37,6 +31,6 @@ class JsonPostSubscriber implements EventSubscriberInterface
             throw new BadRequestHttpException('invalid json body: ' . json_last_error_msg());
         }
 
-        $request->request->replace(is_array($data) ? $data : array());
+        $request->request->replace(is_array($data) ? $data : []);
     }
 }

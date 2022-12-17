@@ -16,7 +16,7 @@ class FileEncryptionService
      * So if we read 10,000 blocks we load 160kb into memory. You may adjust this value
      * to read/write shorter or longer chunks.
      */
-    public const FILE_CHUNK_SIZE = 10000;
+    final public const FILE_CHUNK_SIZE = 10000;
 
     public function encryptFile(File $file, string $key, string $destination): File
     {

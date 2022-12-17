@@ -5,21 +5,29 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @codeCoverageIgnore
- */
 class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /***
+     * @param string $identifier
+     * @return UserInterface|null
+     * @throws NonUniqueResultException
+     */
+    public function loadUserByIdentifier(string $identifier): ?UserInterface
+    {
+        return $this->loadUserByUsername($identifier);
     }
 
     /**

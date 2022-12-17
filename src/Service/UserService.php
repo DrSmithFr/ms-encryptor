@@ -1,21 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service;
 
-use Exception;
 use App\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 class UserService
 {
     /**
-     * @throws Exception
-     *
      * @param string $password
-     * @param string $email
-     *
+     * @param string|null $uuid
      * @return User
      */
     public function createUser(string $password, string $uuid = null): User
@@ -29,10 +25,6 @@ class UserService
         return $user;
     }
 
-    /**
-     * @param User   $user
-     * @return User
-     */
     public function updatePassword(User $user): User
     {
         $encoded = $this->encodePassword($user->getPlainPassword());
@@ -43,11 +35,6 @@ class UserService
         return $user;
     }
 
-    /**
-     * @param string $pass
-     *
-     * @return string
-     */
     private function encodePassword(string $pass): string
     {
         return password_hash($pass, PASSWORD_ARGON2I);

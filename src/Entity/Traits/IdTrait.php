@@ -5,18 +5,13 @@ namespace App\Entity\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
-/**
- * @codeCoverageIgnore
- */
 trait IdTrait
 {
-    /**
-     * @JMS\Type("int")
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private ?int $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[JMS\Type('int')]
+    private ?int $id = null;
 
     public function getId(): ?int
     {

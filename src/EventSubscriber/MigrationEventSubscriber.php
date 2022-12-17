@@ -7,16 +7,11 @@ use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Tools\ToolEvents;
 
-/**
- * @codeCoverageIgnore
- */
 class MigrationEventSubscriber implements EventSubscriber
 {
     public function getSubscribedEvents(): array
     {
-        return array(
-            ToolEvents::postGenerateSchema,
-        );
+        return [ToolEvents::postGenerateSchema];
     }
 
     /**

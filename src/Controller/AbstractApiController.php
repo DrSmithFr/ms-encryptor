@@ -15,17 +15,12 @@ abstract class AbstractApiController extends AbstractController
 
     /**
      * UserController constructor.
-     *
-     * @param SerializerInterface $serializer
      */
     public function __construct(SerializerInterface $serializer)
     {
         $this->setSerializer($serializer);
     }
 
-    /**
-     * @param User $user
-     */
     public function denyAccessUnlessOwning(User $user): void
     {
         if (!($this->isGranted('ROLE_ADMIN') || $user === $this->getUser())) {

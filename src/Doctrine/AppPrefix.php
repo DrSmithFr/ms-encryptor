@@ -23,9 +23,9 @@ class AppPrefix implements EventSubscriber
         $classMetadata = $args->getClassMetadata();
 
         // Only add the prefixes to our own entities.
-        if (false !== strpos($classMetadata->namespace, 'App\Entity')) {
+        if (str_contains($classMetadata->namespace, 'App\Entity')) {
             // Do not re-apply the prefix when the table is already prefixed
-            if (false === strpos($classMetadata->getTableName(), $this->prefix)) {
+            if (!str_contains($classMetadata->getTableName(), $this->prefix)) {
                 $tableName = $this->prefix . $classMetadata->getTableName();
                 $classMetadata->setPrimaryTable(['name' => $tableName]);
             }
@@ -35,7 +35,7 @@ class AppPrefix implements EventSubscriber
                     $mappedTableName = $classMetadata->associationMappings[$fieldName]['joinTable']['name'];
 
                     // Do not re-apply the prefix when the association is already prefixed
-                    if (false !== strpos($mappedTableName, $this->prefix)) {
+                    if (str_contains((string) $mappedTableName, $this->prefix)) {
                         continue;
                     }
 

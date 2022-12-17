@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Tests;
+namespace App\Tests;
 
 use LogicException;
 use JMS\Serializer\SerializerInterface;

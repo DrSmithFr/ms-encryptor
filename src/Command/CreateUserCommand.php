@@ -15,30 +15,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateUserCommand extends Command
 {
-    private UserService   $userService;
-
-    private EntityManagerInterface $entityManager;
-
     public function __construct(
-        UserService $userService,
-        EntityManagerInterface $entityManager
+        private readonly UserService $userService,
+        private readonly EntityManagerInterface $entityManager
     ) {
-        $this->userService   = $userService;
-        $this->entityManager = $entityManager;
         parent::__construct();
     }
 
     public function configure(): void
     {
         $this
-            ->setName('encryptor:user:generate');
+            ->setName('app:user:generate');
     }
 
     /**
      * @throws Exception
-     *
-     * @param OutputInterface $output
-     * @param InputInterface  $input
      */
     public function execute(InputInterface $input, OutputInterface $output): void
     {

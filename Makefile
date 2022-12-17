@@ -4,8 +4,8 @@ build: env hooks dependencies start build start database
 reload: stop start
 
 env:
-	sudo apt install php7.4-fpm php7.4-common php7.4-curl php7.4-json php7.4-pgsql php7.4-dom php7.4-mbstring php-xdebug
-	sudo apt-get install php7.4-sqlite
+	sudo apt install php8.1-cli php8.1-fpm php8.1-common php8.1-curl php8.1-pgsql php8.1-xml php8.1-mbstring php-xdebug
+	sudo apt-get install php8.1-sqlite
 	sudo apt install nginx
 
 dependencies:

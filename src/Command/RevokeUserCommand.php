@@ -18,23 +18,17 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 
 class RevokeUserCommand extends Command
 {
-    private EntityManagerInterface  $entityManager;
-
-    private UserRepository          $repository;
-
     public function __construct(
-        UserRepository $repository,
-        EntityManagerInterface $entityManager
+        private readonly UserRepository $repository,
+        private readonly EntityManagerInterface $entityManager
     ) {
-        $this->repository    = $repository;
-        $this->entityManager = $entityManager;
         parent::__construct();
     }
 
     public function configure(): void
     {
         $this
-            ->setName('encryptor:user:revoke')
+            ->setName('app:user:revoke')
             ->addArgument('uuid', InputArgument::REQUIRED, 'UUID of user')
             ->addOption('user', 'u', InputOption::VALUE_NONE, 'Add role user')
             ->addOption('admin', 'a', InputOption::VALUE_NONE, 'Add role admin')

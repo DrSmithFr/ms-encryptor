@@ -8,54 +8,48 @@ use Exception;
 use App\Entity\Media;
 use App\Form\MediaType;
 use App\Service\MediaService;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-/**
- * @Route(path="/medias", name="medias_")
- * @IsGranted("ROLE_USER")
- */
+#[Route(path: '/medias', name: 'medias_')]
+#[IsGranted('ROLE_USER')]
 class MediaController extends AbstractApiController
 {
     /**
      * Return BinaryFileResponse according to media mineType (for download and display)
-     * @Route("/{uuid}", name="by_id_file", methods={"GET"}, requirements={"id"="\d+"})
-     * @ParamConverter("media", class="App\Entity\Media")
-     * @SWG\Parameter(
+     *
+     * @OA\Parameter(
      *     name="id",
      *     in="path",
-     *     type="integer",
      *     description="Media uniq identifier",
      *     required=true,
-     *     @SWG\Schema(type="number")
+     *     @OA\Schema(type="number")
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="The requested medias"
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=404,
      *     description="Not found"
      * )
-     * @SWG\Tag(name="Medias")
+     * @OA\Tag(name="Medias")
      * @Security(name="Bearer")
      *
-     * @param Media        $media
-     * @param MediaService $mediaService
-     *
-     * @return BinaryFileResponse
      */
+    #[Route(path: '/{uuid}', name: 'by_id_file', requirements: ['id'=>'\d+'], methods: ['GET'])]
+    #[Security(name: 'Bearer')]
     public function getByIdAction(
-        Media $media,
+        #[MapEntity(class: Media::class)] Media $media,
         MediaService $mediaService
     ): StreamedResponse {
         $response = new StreamedResponse();
@@ -76,75 +70,67 @@ class MediaController extends AbstractApiController
 
     /**
      * Information about size, mineType and extension
-     * @Route("/{uuid}/metadata", name="by_id_metadata", methods={"GET"}, requirements={"id"="\d+"})
-     * @ParamConverter("media", class="App\Entity\Media")
-     * @SWG\Parameter(
+     * @OA\Parameter(
      *     name="id",
      *     in="path",
-     *     type="integer",
      *     description="Media uuid identifier",
      *     required=true,
-     *     @SWG\Schema(type="number")
+     *     @OA\Schema(type="number")
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="The requested medias",
      *     @Model(type=Media::class, groups={"id", "Default"})
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=404,
      *     description="Not found"
      * )
-     * @SWG\Tag(name="Medias")
+     * @OA\Tag(name="Medias")
      * @Security(name="Bearer")
      *
-     * @param Media $media
      *
-     * @return JsonResponse
      */
+    #[Route(path: '/{uuid}/metadata', name: 'by_id_metadata', requirements: ['id'=>'\d+'], methods: ['GET'])]
     public function getMetadataByIdAction(
-        Media $media
+        #[MapEntity(class: Media::class)] Media $media
     ): JsonResponse {
         return $this->serializeResponse($media, ['Default']);
     }
 
     /**
-     * Upload an encrypt a new media (retrieve the UUID of newly created media)
-     * @Route("", name="add", methods={"POST"})
-     * @SWG\Parameter(
+     * Upload and encrypt a new media (retrieve the UUID of newly created media)
+     * @OA\Parameter(
      *     name="json body",
-     *     in="body",
+     *     in="query",
      *     description="Json representation of a Media",
      *     required=true,
-     *     @SWG\Schema(ref=@Model(type=Media::class, groups={"id", "Default"}))
+     *     @OA\Schema(ref=@Model(type=Media::class, groups={"id", "Default"}))
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=200,
      *     description="The media has been created",
-     *     @SWG\Schema(
+     *     @OA\Schema(
      *        type="object",
      *        example={"uuid": "gjc7834ace3-8525-4814-bf0f-b7146bc9e8ab"}
      *     )
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=400,
      *     description="The id submitted in body dont match the one on url"
      * )
-     * @SWG\Response(
+     * @OA\Response(
      *     response=406,
      *     description="No form submitted"
      * )
-     * @SWG\Tag(name="Medias")
+     * @OA\Tag(name="Medias")
      * @Security(name="Bearer")
      *
      * @throws Exception
      *
-     * @param EntityManagerInterface $entityManager
-     * @param MediaService           $mediaService
-     * @param Request                $request
      *
-     * @return JsonResponse
      */
+    #[Route(path: '', name: 'add', methods: ['POST'])]
     public function newAction(
         Request $request,
         EntityManagerInterface $entityManager,

@@ -2,6 +2,8 @@
 
 namespace App\Controller\Traits;
 
+use App\Controller\AbstractApiController;
+use App\Controller\LoginController;
 use InvalidArgumentException;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
@@ -20,8 +22,7 @@ trait SerializerAware
 
     /**
      * @param SerializerInterface $serializer
-     *
-     * @return $this
+     * @return self
      */
     private function setSerializer(SerializerInterface $serializer): self
     {
@@ -32,10 +33,6 @@ trait SerializerAware
     /**
      * Create serialization context for specifics groups
      * with serialize null field enable
-     *
-     * @param array $group
-     *
-     * @return SerializationContext
      */
     private function getSerializationContext(array $group = ['Default']): SerializationContext
     {
@@ -45,9 +42,6 @@ trait SerializerAware
         return $context;
     }
 
-    /**
-     * @return SerializerInterface
-     */
     private function getSerializer(): SerializerInterface
     {
         return $this->serializer;
@@ -55,11 +49,7 @@ trait SerializerAware
 
     /**
      * Return the json string of the data, serialize for specifics groups
-     *
      * @param SerializableEntity $data
-     * @param array              $group
-     *
-     * @return string
      */
     protected function serialize($data, array $group = ['Default']): string
     {
@@ -74,13 +64,8 @@ trait SerializerAware
 
     /**
      * Return the JsonResponse of the data, serialize for specifics groups
-     *
-     * @param mixed $data
-     * @param array $group
-     *
-     * @return JsonResponse
      */
-    protected function serializeResponse($data, array $group = ['Default']): JsonResponse
+    protected function serializeResponse(mixed $data, array $group = ['Default']): JsonResponse
     {
         $response = new JsonResponse([], JsonResponse::HTTP_OK);
         $json     = $this->serialize($data, $group);
@@ -89,11 +74,6 @@ trait SerializerAware
 
     /**
      * Simple JsonResponse use to transmit a message
-     *
-     * @param string $message
-     * @param int    $code
-     *
-     * @return JsonResponse
      */
     protected function messageResponse(string $message, int $code = JsonResponse::HTTP_OK): JsonResponse
     {
@@ -110,11 +90,6 @@ trait SerializerAware
 
     /**
      * Simple JsonResponse use to transmit a message
-     *
-     * @param FormInterface $form
-     * @param bool          $showReason
-     *
-     * @return JsonResponse
      */
     protected function formErrorResponse(FormInterface $form, bool $showReason = true): JsonResponse
     {
@@ -128,11 +103,6 @@ trait SerializerAware
         );
     }
 
-    /**
-     * @param FormInterface $form
-     *
-     * @return array
-     */
     private function getFormErrorArray(FormInterface $data): array
     {
         $form = $errors = [];
@@ -163,11 +133,7 @@ trait SerializerAware
 
     /**
      * Simple JsonResponse use to transmit the new id of the created entity
-     *
      * @param mixed  $entity
-     * @param string $message
-     *
-     * @return JsonResponse
      */
     protected function createResponse(SerializableEntity $entity, string $message): JsonResponse
     {

@@ -13,9 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class MediaType extends AbstractType
 {
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

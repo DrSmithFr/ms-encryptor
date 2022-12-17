@@ -1,7 +1,0 @@
-sensio_framework_extra:
-    router:
-        annotations: true
-    # enabling transparent paramConverter on controllers
-    request:
-        converters: true
-        auto_convert: true

@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\EventSubscriber;
+namespace App\Tests\EventSubscriber;
 
 use JsonException;
 use App\EventSubscriber\JsonPostSubscriber;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
-class JsonPostSubscriberTest extends TestCase
+class JsonPostSubscriberTest extends KernelTestCase
 {
     private ?JsonPostSubscriber $service = null;
 
@@ -26,21 +26,19 @@ class JsonPostSubscriberTest extends TestCase
 
         $request
             ->expects(self::once())
-            ->method('getContentType')
+            ->method('getContentTypeFormat')
             ->willReturn('xml');
 
         $request
             ->expects(self::never())
             ->method('getContent');
 
-        /** @var ControllerEvent|MockObject $event */
-        $event = $this
-            ->createMock(ControllerEvent::class);
-
-        $event
-            ->expects(self::once())
-            ->method('getRequest')
-            ->willReturn($request);
+        $event = new ControllerEvent(
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            function () {},
+            $request,
+            1
+        );
 
         $this->service->convertJsonStringToArray($event);
     }
@@ -52,7 +50,7 @@ class JsonPostSubscriberTest extends TestCase
 
         $request
             ->expects(self::once())
-            ->method('getContentType')
+            ->method('getContentTypeFormat')
             ->willReturn('json');
 
         $request
@@ -60,14 +58,12 @@ class JsonPostSubscriberTest extends TestCase
             ->method('getContent')
             ->willReturn('{');
 
-        /** @var ControllerEvent|MockObject $event */
-        $event = $this
-            ->createMock(ControllerEvent::class);
-
-        $event
-            ->expects(self::once())
-            ->method('getRequest')
-            ->willReturn($request);
+        $event = new ControllerEvent(
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            function () {},
+            $request,
+            1
+        );
 
         $this->expectException(JsonException::class);
         $this->service->convertJsonStringToArray($event);
@@ -82,7 +78,7 @@ class JsonPostSubscriberTest extends TestCase
 
         $request
             ->expects(self::once())
-            ->method('getContentType')
+            ->method('getContentTypeFormat')
             ->willReturn('json');
 
         $request
@@ -100,14 +96,12 @@ class JsonPostSubscriberTest extends TestCase
 
         $request->request = $param;
 
-        /** @var ControllerEvent|MockObject $event */
-        $event = $this
-            ->createMock(ControllerEvent::class);
-
-        $event
-            ->expects(self::once())
-            ->method('getRequest')
-            ->willReturn($request);
+        $event = new ControllerEvent(
+            $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            function () {},
+            $request,
+            1
+        );
 
         $this->service->convertJsonStringToArray($event);
     }

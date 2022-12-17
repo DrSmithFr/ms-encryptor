@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace Service;
+namespace App\Tests\Service;
 
-use Tests\ApiTestCase;
+use App\Tests\ApiTestCase;
 use App\Service\EncryptionService;
 
 class EncryptionServiceTest extends ApiTestCase
@@ -14,7 +14,7 @@ class EncryptionServiceTest extends ApiTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->service = self::$container->get(EncryptionService::class);
+        $this->service = self::getContainer()->get(EncryptionService::class);
     }
 
     public function testBasicEncryption(): void

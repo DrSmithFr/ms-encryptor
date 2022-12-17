@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Enum;
 
-/**
- * @codeCoverageIgnore
- */
 final class SecurityRoleEnum extends Enum
 {
     public const USER        = 'ROLE_USER';

@@ -14,13 +14,9 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="medias")
- * @codeCoverageIgnore
- * @JMS\ExclusionPolicy("all")
- * @codeCoverageIgnore
- */
+#[ORM\Table(name: 'medias')]
+#[ORM\Entity]
+#[JMS\ExclusionPolicy('all')]
 class Media
 {
     use IdTrait;
@@ -28,44 +24,33 @@ class Media
     use TimestampableTrait;
     use SoftDeletableTrait;
 
-    /**
-     * @JMS\Type("string")
-     * @ORM\Column(type="uuid", unique=true)
-     */
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[JMS\Type('string')]
     private ?UuidInterface $uuid = null;
 
-    /**
-     * @ORM\Column(name="content_type", type="string", length=255, nullable=true)
-     * @JMS\Expose()
-     */
+    #[ORM\Column(name: 'content_type', type: 'string', length: 255, nullable: true)]
+    #[JMS\Expose]
     private ?string $contentType = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=true)
-     * @JMS\Expose()
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: true)]
+    #[JMS\Expose]
     private ?int $size = null;
 
-    /**
-     * @JMS\Type("string")
-     * @JMS\Expose()
-     * @ORM\Column(type="string", type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[JMS\Type('string')]
+    #[JMS\Expose]
     private ?string $extension = null;
 
-    /**
-     * @JMS\Type("string")
-     * @JMS\Expose()
-     * @ORM\Column(type="string", type="string", length=1024)
-     */
+    #[ORM\Column(type: 'string', length: 1024)]
+    #[JMS\Type('string')]
+    #[JMS\Expose]
     private ?string $key = null;
 
     /**
      * This is just a temporary file holder, for file uploads through a form.
-     *
      * @var UploadedFile|File|SplFileInfo|null
-     * @Assert\File(maxSize="10000000")
      */
+    #[Assert\File(maxSize: 10_000_000)]
     private ?SplFileInfo $file = null;
 
     public function getUuid(): ?UuidInterface
@@ -129,9 +114,6 @@ class Media
         return $this;
     }
 
-    /**
-     * @return UploadedFile|File|SplFileInfo|null
-     */
     public function getFile(): ?SplFileInfo
     {
         return $this->file;

@@ -8,16 +8,8 @@ use RuntimeException;
 
 class EncryptionService
 {
-    private string $publicKey;
-
-    private string $secretKey;
-
-    public function __construct(
-        string $publicKey,
-        string $secretKey
-    ) {
-        $this->publicKey = $publicKey;
-        $this->secretKey = $secretKey;
+    public function __construct(private readonly string $publicKey, private readonly string $secretKey)
+    {
     }
 
     public function encryptData(string $cipher): string
